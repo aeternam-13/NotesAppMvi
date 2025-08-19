@@ -10,40 +10,64 @@ import com.aeternam.notesappmvi.feature_note.domain.model.Note
 import com.aeternam.notesappmvi.feature_note.domain.model.NoteException
 import kotlinx.coroutines.flow.Flow
 import com.aeternam.notesappmvi.core.Result
+import com.aeternam.notesappmvi.core.Result.*
+import com.aeternam.notesappmvi.feature_note.domain.model.NoteDataBaseException
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+
+
+class NoteDaoLocal(
+    private val dao : NoteDaoRoom
+) : NoteDao {
+
+    override fun getNotes(): Flow<Result<List<Note>, NoteException>> {
+        // This is the Flow from your database. It automatically emits on changes.
+        val notesFlow = dao.getNotes()
+
+        return flow<Result<List<Note>, NoteException>> {
+
+            val initialNotes = notesFlow.first()
+            emit(Success(initialNotes))
+
+            notesFlow.collect { notes ->
+                emit(Success(notes))
+            }
+        }.catch { throwable ->
+            emit(
+                Failure(
+                    NoteDataBaseException(
+                        throwable.message ?: "An unknown database error occurred."
+                    )
+                )
+            )
+        }
+    }
+
+    override suspend fun getNoteById(id: Int): Note?{
+        return dao.getNoteById(id)
+    }
+
+    override suspend fun insertNote(note : Note){
+        return dao.insertNote(note)
+    }
+
+    override suspend fun deleteNote(note: Note){
+        return dao.deleteNote(note)
+    }
+}
 
 @Dao
-interface NoteDaoLocal : NoteDao {
+interface NoteDaoRoom {
     @Query("SELECT * FROM note")
-    override fun getNotes() : Flow<List<Note>>
+     fun getNotes() : Flow<List<Note>>
 
     @Query("SELECT * FROM note WHERE id = :id")
-    override suspend fun getNoteById(id: Int): Note?
+    suspend fun getNoteById(id: Int): Note?
 
     @Insert(onConflict =  OnConflictStrategy.Companion.REPLACE)
-    override suspend fun insertNote(note : Note)
+    suspend fun insertNote(note : Note)
 
     @Delete
-    override suspend fun deleteNote(note: Note)
+    suspend fun deleteNote(note: Note)
 }
-
-class ExtensibleClass{
-
-}
-
-fun ExtensibleClass.extendedBehavior() : String{
-    return ""
-}
-
-
-fun returnable(retVal : String?) : String{
-    retVal?.let {
-        return it + "asddsa"
-    }
-    return ""
-}
-
-
-fun sum(a : Int , b : Int) : Int {
-    return (a + b).also { it + 1 }
-}
-

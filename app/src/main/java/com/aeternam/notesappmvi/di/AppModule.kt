@@ -2,6 +2,7 @@ package com.aeternam.notesappmvi.di
 
 import android.app.Application
 import androidx.room.Room
+import com.aeternam.notesappmvi.feature_note.data.local.NoteDaoLocal
 import com.aeternam.notesappmvi.feature_note.data.local.NoteDatabase
 import com.aeternam.notesappmvi.feature_note.data.repository.NoteRepositoryImpl
 import com.aeternam.notesappmvi.feature_note.domain.repository.NoteRepository
@@ -28,8 +29,14 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNoteRepository(db: NoteDatabase) : NoteRepository {
-        return NoteRepositoryImpl(db.noteDao)
+    fun provideNoteDaoDatabase(db: NoteDatabase): NoteDaoLocal {
+        return NoteDaoLocal(db.noteDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNoteRepository(dao: NoteDaoLocal) : NoteRepository {
+        return NoteRepositoryImpl(dao)
     }
 
     @Provides

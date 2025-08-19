@@ -8,7 +8,7 @@ import com.aeternam.notesappmvi.core.Result
 
 interface NoteDao {
 
-    fun getNotes() : Flow<List<Note>>
+    fun getNotes() : Flow<Result<List<Note>, NoteException>>
 
     suspend fun getNoteById(id: Int): Note?
 
