@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import com.aeternam.notesappmvi.feature_note.domain.model.Note
 import com.aeternam.notesappmvi.feature_note.domain.util.NoteOrder
 import com.aeternam.notesappmvi.feature_note.presentation.notes_screen.NotesScreenStateHolder
-import com.aeternam.notesappmvi.feature_note.presentation.notes_screen.NotesScreenUiEvent
 import com.aeternam.notesappmvi.feature_note.presentation.notes_screen.screen.components.NoteItem
 import com.aeternam.notesappmvi.feature_note.presentation.notes_screen.screen.components.OrderSection
 

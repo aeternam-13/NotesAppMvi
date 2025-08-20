@@ -1,5 +1,6 @@
 package com.aeternam.notesappmvi.feature_note.presentation.add_edit_note_screen
 
+import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,13 +20,10 @@ class AddEditNoteViewModel @Inject constructor(
     val useCases: NoteUseCases,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private val _state = MutableStateFlow<AddEditNoteState>(AddEditNoteState.Loading)
+    private var _stateHolder = AddEditNoteStateHolder(color = Note.noteColors.random().toArgb())
+    private val _state = MutableStateFlow<AddEditNoteState>(AddEditNoteState.Editing(_stateHolder))
     val state: StateFlow<AddEditNoteState> = _state
-
-    var _stateHolder = AddEditNoteStateHolder()
-
     private var currentNoteId: Int? = null
-
     private val _uiEvent = MutableSharedFlow<AddEditNoteUiEvent>()
     val uiEvent: SharedFlow<AddEditNoteUiEvent> = _uiEvent
 
