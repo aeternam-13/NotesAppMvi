@@ -1,4 +1,4 @@
-package com.aeternam.notesappmvi.feature_note.presentation.composables
+package com.aeternam.notesappmvi.feature_note.presentation.add_edit_note_screen.composables
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
