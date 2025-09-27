@@ -1,6 +1,7 @@
 package com.aeternam.notesappmvi.feature_note.domain.repository
 
 import com.aeternam.notesappmvi.core.Result
+import com.aeternam.notesappmvi.feature_note.domain.model.AppMode
 import com.aeternam.notesappmvi.feature_note.domain.model.Note
 import com.aeternam.notesappmvi.feature_note.domain.model.NoteException
 import kotlinx.coroutines.flow.Flow
@@ -13,5 +14,7 @@ interface NoteRepository {
     suspend fun insertNode(note : Note)
 
     suspend fun deleteNote(note: Note)
+
+    fun toggleAppMode() : AppMode
 
 }

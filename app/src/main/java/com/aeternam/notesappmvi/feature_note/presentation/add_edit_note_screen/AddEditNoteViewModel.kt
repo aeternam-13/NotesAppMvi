@@ -117,3 +117,9 @@ class AddEditNoteViewModel @Inject constructor(
 
 
 }
+
+
+fun assda(){
+    val exampleList = mutableListOf<Char>()
+    exampleList.last()
+}

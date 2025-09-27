@@ -7,6 +7,9 @@ import com.aeternam.notesappmvi.feature_note.domain.model.Note
 import com.aeternam.notesappmvi.feature_note.domain.usecase.NoteUseCases
 import com.aeternam.notesappmvi.feature_note.domain.util.NoteOrder
 import com.aeternam.notesappmvi.feature_note.domain.util.OrderType
+import com.aeternam.notesappmvi.feature_note.presentation.notes_screen.NotesScreenState.*
+import com.aeternam.notesappmvi.feature_note.presentation.notes_screen.NotesScreenUiEvent.*
+import com.aeternam.notesappmvi.feature_note.presentation.notes_screen.screen.NotesScreenSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -50,7 +53,7 @@ class NotesScreenViewModel @Inject constructor(
                     useCases.deleteNote(intent.note)
                     recentlyDeletedNote = intent.note
                     _uiEvent.emit(
-                        NotesScreenUiEvent.ShowSnackBarWithUndo(
+                        ShowSnackBarWithUndo(
                             "Deleted Note", { onIntent(NotesScreenIntent.RestoreNote) })
                     )
                 }
@@ -69,8 +72,13 @@ class NotesScreenViewModel @Inject constructor(
                 _stateHolder = _stateHolder.copy(
                     isOrderSectionVisible = !_stateHolder.isOrderSectionVisible
                 )
+                _state.value = Success(_stateHolder)
             }
 
+            NotesScreenIntent.ToggleAppMode -> {
+                _stateHolder =  _stateHolder.copy(appMode = useCases.toggleAppMode())
+                _state.value = Success(_stateHolder)
+            }
         }
     }
 
@@ -78,7 +86,6 @@ class NotesScreenViewModel @Inject constructor(
     private fun getNotes(noteOrder: NoteOrder) {
         getNotesJob?.cancel()
         getNotesJob = useCases.getNotes(noteOrder).onEach { result ->
-
             when (result) {
                 is Result.Failure -> _state.value = NotesScreenState.Error(result.error)
                 is Result.Success -> {

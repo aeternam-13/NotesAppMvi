@@ -18,6 +18,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -26,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.aeternam.notesappmvi.feature_note.domain.model.AppMode
 import com.aeternam.notesappmvi.feature_note.domain.model.Note
 import com.aeternam.notesappmvi.feature_note.domain.util.NoteOrder
 import com.aeternam.notesappmvi.feature_note.presentation.notes_screen.NotesScreenStateHolder
@@ -37,6 +40,7 @@ fun NotesScreenSuccess(
     stateHolder: NotesScreenStateHolder,
     modifier : Modifier,
     toggleOrderSection : () -> Unit,
+    toggleAppMode: () -> Unit,
     onOrderChange : (NoteOrder) -> Unit,
     onDeleteNote : (Note) -> Unit,
     navigateToAddEditNote: (Note) -> Unit
@@ -55,10 +59,23 @@ fun NotesScreenSuccess(
                     text = "NotesApp", style = MaterialTheme.typography.headlineLarge
                 )
                 IconButton(
+                    onClick = toggleAppMode,
+                ) {
+                    Icon(
+                        imageVector = when (stateHolder.appMode) {
+                            AppMode.Api -> Icons.Default.Check
+                            AppMode.Disk -> Icons.Default.Close
+                        },
+                        contentDescription = "toggleMode"
+                    )
+                }
+                IconButton(
                     onClick = toggleOrderSection,
                 ) {
                     Icon(imageVector = Icons.Default.Build, contentDescription = "Sort")
                 }
+
+
 
             }
             AnimatedVisibility(

@@ -70,6 +70,7 @@ fun NotesScreen(
             is NotesScreenState.Success -> NotesScreenSuccess(
                 stateHolder = current.stateHolder,
                 modifier = Modifier.padding(innerPadding),
+                toggleAppMode = {viewModel.onIntent(NotesScreenIntent.ToggleAppMode)},
                 toggleOrderSection = { viewModel.onIntent(NotesScreenIntent.ToggleOrderSection) },
                 onOrderChange = { order -> viewModel.onIntent(NotesScreenIntent.Order(order)) },
                 onDeleteNote = { note -> viewModel.onIntent(NotesScreenIntent.DeleteNote(note)) },

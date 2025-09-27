@@ -1,10 +1,5 @@
 package com.aeternam.notesappmvi.feature_note.data.local
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
 import com.aeternam.notesappmvi.feature_note.data.NoteDao
 import com.aeternam.notesappmvi.feature_note.domain.model.Note
 import com.aeternam.notesappmvi.feature_note.domain.model.NoteException
@@ -16,12 +11,11 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 
-
 class NoteDaoLocal(
     private val dao : NoteDaoRoom
 ) : NoteDao {
 
-    override fun getNotes(): Flow<Result<List<Note>, NoteException>> {
+    override  fun getNotes(): Flow<Result<List<Note>, NoteException>> {
         // This is the Flow from your database. It automatically emits on changes.
         val notesFlow = dao.getNotes()
 
@@ -57,17 +51,3 @@ class NoteDaoLocal(
     }
 }
 
-@Dao
-interface NoteDaoRoom {
-    @Query("SELECT * FROM note")
-     fun getNotes() : Flow<List<Note>>
-
-    @Query("SELECT * FROM note WHERE id = :id")
-    suspend fun getNoteById(id: Int): Note?
-
-    @Insert(onConflict =  OnConflictStrategy.Companion.REPLACE)
-    suspend fun insertNote(note : Note)
-
-    @Delete
-    suspend fun deleteNote(note: Note)
-}

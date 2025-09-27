@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.room.Room
 import com.aeternam.notesappmvi.feature_note.data.local.NoteDaoLocal
 import com.aeternam.notesappmvi.feature_note.data.local.NoteDatabase
+import com.aeternam.notesappmvi.feature_note.data.remote.NoteDaoApi
+import com.aeternam.notesappmvi.feature_note.data.remote.NotesApiService
 import com.aeternam.notesappmvi.feature_note.data.repository.NoteRepositoryImpl
 import com.aeternam.notesappmvi.feature_note.domain.repository.NoteRepository
 import com.aeternam.notesappmvi.feature_note.domain.usecase.AddNote
@@ -11,10 +13,13 @@ import com.aeternam.notesappmvi.feature_note.domain.usecase.DeleteNote
 import com.aeternam.notesappmvi.feature_note.domain.usecase.GetNote
 import com.aeternam.notesappmvi.feature_note.domain.usecase.GetNotes
 import com.aeternam.notesappmvi.feature_note.domain.usecase.NoteUseCases
+import com.aeternam.notesappmvi.feature_note.domain.usecase.ToggleAppMode
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -35,8 +40,29 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNoteRepository(dao: NoteDaoLocal) : NoteRepository {
-        return NoteRepositoryImpl(dao)
+    fun provideRetrofit(): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("http://10.0.2.2/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideMyApiService(retrofit: Retrofit): NotesApiService {
+        return retrofit.create(NotesApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNoteDaoApi(apiService : NotesApiService) : NoteDaoApi {
+        return NoteDaoApi(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNoteRepository(daoLocal: NoteDaoLocal, daoApi: NoteDaoApi): NoteRepository {
+        return NoteRepositoryImpl(daoLocal, daoApi)
     }
 
     @Provides
@@ -46,7 +72,8 @@ object AppModule {
             getNotes = GetNotes(repository),
             deleteNote = DeleteNote(repository),
             addNote = AddNote(repository),
-            getNote = GetNote(repository)
+            getNote = GetNote(repository),
+            toggleAppMode = ToggleAppMode(repository)
         )
     }
 

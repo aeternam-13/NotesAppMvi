@@ -9,4 +9,6 @@ sealed class NotesScreenIntent {
     data object RestoreNote : NotesScreenIntent()
     data object ToggleOrderSection : NotesScreenIntent()
 
+    data object ToggleAppMode : NotesScreenIntent()
+
 }
