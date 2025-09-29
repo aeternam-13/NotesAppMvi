@@ -20,7 +20,7 @@ class AddEditNoteViewModel @Inject constructor(
     val useCases: NoteUseCases,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private var _stateHolder = AddEditNoteStateHolder(color = Note.noteColors.random().toArgb())
+    private var _stateHolder = AddEditNoteStateHolder(color = Note.noteColors.random().toArgb().toLong())
     private val _state = MutableStateFlow<AddEditNoteState>(AddEditNoteState.Editing(_stateHolder))
     val state: StateFlow<AddEditNoteState> = _state
     private var currentNoteId: Int? = null

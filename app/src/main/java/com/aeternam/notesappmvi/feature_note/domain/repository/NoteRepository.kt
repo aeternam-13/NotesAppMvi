@@ -13,6 +13,8 @@ interface NoteRepository {
 
     suspend fun insertNode(note : Note)
 
+    suspend fun updateNote(note : Note) : Result<Unit, NoteException>
+
     suspend fun deleteNote(note: Note)
 
     fun toggleAppMode() : AppMode

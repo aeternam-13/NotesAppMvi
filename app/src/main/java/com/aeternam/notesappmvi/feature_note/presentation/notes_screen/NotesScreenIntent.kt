@@ -8,7 +8,7 @@ sealed class NotesScreenIntent {
     data class DeleteNote(val note : Note) : NotesScreenIntent()
     data object RestoreNote : NotesScreenIntent()
     data object ToggleOrderSection : NotesScreenIntent()
-
+    data object Retry : NotesScreenIntent()
     data object ToggleAppMode : NotesScreenIntent()
 
 }

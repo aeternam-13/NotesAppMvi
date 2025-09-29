@@ -17,11 +17,6 @@ sealed class Result<out S, out F> {
             is Failure -> defaultValue
         }
     }
-
-    fun map() {
-
-    }
-
     inline fun <S, F, NewS> Result<S, F>.map(transform: (S) -> NewS): Result<NewS, F> {
         return when (this) {
             is Success -> Success(transform(data))

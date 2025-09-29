@@ -7,6 +7,6 @@ sealed class AddEditNoteIntent {
     data class ChangeTitleFocus(val focusState : FocusState) : AddEditNoteIntent()
     data class EnteredContent(val value : String) : AddEditNoteIntent()
     data class ChangeContentFocus(val focusState : FocusState) : AddEditNoteIntent()
-    data class ChangeColor(val color : Int) : AddEditNoteIntent()
+    data class ChangeColor(val color : Long) : AddEditNoteIntent()
     data object SaveNote : AddEditNoteIntent()
 }

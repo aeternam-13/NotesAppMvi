@@ -67,6 +67,7 @@ dependencies {
     ksp(libs.hilt.android.compiler)
 
     implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.compose.material.icons.extended)
 
     // Retrofit
     implementation(libs.retrofit)

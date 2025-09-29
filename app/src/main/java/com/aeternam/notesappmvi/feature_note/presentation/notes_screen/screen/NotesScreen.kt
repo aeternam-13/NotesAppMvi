@@ -65,7 +65,11 @@ fun NotesScreen(
         }
     }, content = { innerPadding ->
         when (val current = state) {
-            is NotesScreenState.Error -> NotesScreenError(current.error)
+            is NotesScreenState.Error -> NotesScreenError(current.error, {
+                viewModel.onIntent(
+                    NotesScreenIntent.Retry
+                )
+            })
             is NotesScreenState.Loading -> NotesScreenLoading()
             is NotesScreenState.Success -> NotesScreenSuccess(
                 stateHolder = current.stateHolder,

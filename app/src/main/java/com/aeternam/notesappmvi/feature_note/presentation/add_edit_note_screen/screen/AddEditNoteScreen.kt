@@ -40,7 +40,7 @@ import kotlinx.coroutines.launch
 fun AddEditNoteScreen(
     navController: NavController,
     noteId : Int,
-    noteColor: Int,
+    noteColor: Long,
     viewModel: AddEditNoteViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -49,7 +49,7 @@ fun AddEditNoteScreen(
 
     val noteBackgroundAnimation = remember {
         Animatable(
-            Color(getBackgroundColor(noteColor, state))
+            Color(getBackgroundColor(noteColor.toInt(), state))
         )
     }
 
@@ -92,7 +92,7 @@ fun AddEditNoteScreen(
                                 animationSpec = tween(durationMillis = 500)
                             )
                         }
-                        viewModel.onIntent(AddEditNoteIntent.ChangeColor(color))
+                        viewModel.onIntent(AddEditNoteIntent.ChangeColor(color.toLong()))
                     },
 
                     enteredTitle = {
@@ -120,7 +120,7 @@ fun AddEditNoteScreen(
 
 private fun getBackgroundColor(noteColor: Int, state: AddEditNoteState): Int {
     if (noteColor != -1) return noteColor
-    if (state is AddEditNoteState.Editing) return state.stateHolder.color
+    if (state is AddEditNoteState.Editing) return state.stateHolder.color.toInt()
     return Color.Black.toArgb()
 }
 

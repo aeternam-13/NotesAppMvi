@@ -54,7 +54,7 @@ fun AddEditNoteScreenEditing(
                         .clip(CircleShape)
                         .background(it)
                         .border(
-                            width = 3.dp, color = if (stateHolder.color == colorInt) {
+                            width = 3.dp, color = if (stateHolder.color.toInt() == colorInt) {
                                 Color.Black
                             } else Color.Transparent, shape = CircleShape
                         )

@@ -24,7 +24,7 @@ import javax.inject.Inject
 class NotesScreenViewModel @Inject constructor(
     val useCases: NoteUseCases
 ) : ViewModel() {
-    private val _state = MutableStateFlow<NotesScreenState>(NotesScreenState.Loading)
+    private val _state = MutableStateFlow<NotesScreenState>(Loading)
     val state: StateFlow<NotesScreenState> = _state
 
     private val _uiEvent = MutableSharedFlow<NotesScreenUiEvent>()
@@ -75,29 +75,32 @@ class NotesScreenViewModel @Inject constructor(
                 _state.value = Success(_stateHolder)
             }
 
-            NotesScreenIntent.ToggleAppMode -> {
+            is NotesScreenIntent.ToggleAppMode -> {
                 _stateHolder =  _stateHolder.copy(appMode = useCases.toggleAppMode())
                 _state.value = Success(_stateHolder)
+                getNotes(_stateHolder.noteOrder)
             }
+
+            is NotesScreenIntent.Retry -> getNotes(_stateHolder.noteOrder)
         }
     }
 
 
     private fun getNotes(noteOrder: NoteOrder) {
+        _state.value = Loading
         getNotesJob?.cancel()
         getNotesJob = useCases.getNotes(noteOrder).onEach { result ->
             when (result) {
-                is Result.Failure -> _state.value = NotesScreenState.Error(result.error)
+                is Result.Failure -> _state.value = Error(result.error)
                 is Result.Success -> {
                     _stateHolder = _stateHolder.copy(
                         notes = result.data, noteOrder = noteOrder
                     )
-                    _state.value = NotesScreenState.Success(
+                    _state.value = Success(
                         _stateHolder
                     )
                 }
             }
-
         }.launchIn(viewModelScope)
     }
 }

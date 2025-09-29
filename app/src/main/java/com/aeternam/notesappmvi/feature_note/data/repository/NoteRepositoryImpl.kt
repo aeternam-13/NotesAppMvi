@@ -32,6 +32,10 @@ class NoteRepositoryImpl(
         dao.deleteNote(note)
     }
 
+    override suspend fun updateNote(note :Note): Result<Unit, NoteException> {
+        return dao.updateNote(note)
+    }
+
     override fun toggleAppMode(): AppMode {
         return when (dao) {
             is NoteDaoLocal -> {

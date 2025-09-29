@@ -17,9 +17,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Api
 import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Hive
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -38,78 +39,66 @@ import com.aeternam.notesappmvi.feature_note.presentation.notes_screen.screen.co
 @Composable
 fun NotesScreenSuccess(
     stateHolder: NotesScreenStateHolder,
-    modifier : Modifier,
-    toggleOrderSection : () -> Unit,
+    modifier: Modifier,
+    toggleOrderSection: () -> Unit,
     toggleAppMode: () -> Unit,
-    onOrderChange : (NoteOrder) -> Unit,
-    onDeleteNote : (Note) -> Unit,
+    onOrderChange: (NoteOrder) -> Unit,
+    onDeleteNote: (Note) -> Unit,
     navigateToAddEditNote: (Note) -> Unit
-){
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(8.dp)
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(8.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+            Text(
+                text = "NotesApp", style = MaterialTheme.typography.headlineLarge
+            )
+            IconButton(
+                onClick = toggleAppMode,
             ) {
-                Text(
-                    text = "NotesApp", style = MaterialTheme.typography.headlineLarge
-                )
-                IconButton(
-                    onClick = toggleAppMode,
-                ) {
-                    Icon(
-                        imageVector = when (stateHolder.appMode) {
-                            AppMode.Api -> Icons.Default.Check
-                            AppMode.Disk -> Icons.Default.Close
-                        },
-                        contentDescription = "toggleMode"
-                    )
-                }
-                IconButton(
-                    onClick = toggleOrderSection,
-                ) {
-                    Icon(imageVector = Icons.Default.Build, contentDescription = "Sort")
-                }
-
-
-
-            }
-            AnimatedVisibility(
-                visible = stateHolder.isOrderSectionVisible,
-                enter = fadeIn() + slideInVertically(),
-                exit = fadeOut() + slideOutVertically()
-            ) {
-                OrderSection(
-                    noteOrder = stateHolder.noteOrder,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 16.dp),
-                    onOrderChange = onOrderChange
+                Icon(
+                    imageVector = when (stateHolder.appMode) {
+                        AppMode.Api -> Icons.Filled.Api
+                        AppMode.Disk -> Icons.Filled.Hive
+                    },
+                    contentDescription = "toggleMode"
                 )
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items( stateHolder.notes) { note ->
-                    NoteItem (
-                        note = note, modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(all = 8.dp)
-                            .clickable {
-
-                                navigateToAddEditNote(note)
-//                                navController.navigate(
-//                                    Screens.AddEditNoteScreen.route + "?noteId=${note.id}&noteColor=${note.color}"
-//                                )
-                            },
-
-                        onDeleteClick ={ onDeleteNote(note)})
-
-                }
+            IconButton(
+                onClick = toggleOrderSection,
+            ) {
+                Icon(imageVector = Icons.Default.Build, contentDescription = "Sort")
             }
         }
-
+        AnimatedVisibility(
+            visible = stateHolder.isOrderSectionVisible,
+            enter = fadeIn() + slideInVertically(),
+            exit = fadeOut() + slideOutVertically()
+        ) {
+            OrderSection(
+                noteOrder = stateHolder.noteOrder,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
+                onOrderChange = onOrderChange
+            )
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
+            items(stateHolder.notes) { note ->
+                NoteItem(
+                    note = note, modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 8.dp)
+                        .clickable { navigateToAddEditNote(note) },
+                    onDeleteClick = { onDeleteNote(note) })
+            }
+        }
+    }
 }

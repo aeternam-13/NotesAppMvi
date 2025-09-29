@@ -15,4 +15,6 @@ interface NoteDao {
     suspend fun insertNote(note : Note)
 
     suspend fun deleteNote(note: Note)
+
+    suspend fun updateNote(note : Note) : Result<Unit, NoteException>
 }
