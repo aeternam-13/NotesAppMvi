@@ -95,22 +95,49 @@ class AddEditNoteViewModel @Inject constructor(
             }
 
             AddEditNoteIntent.SaveNote -> {
-                viewModelScope.launch {
-                    try {
-                        useCases.addNote(
-                            Note(
-                                title = _stateHolder.title.text,
-                                content = _stateHolder.content.text,
-                                color = _stateHolder.color,
-                                timestamp = System.currentTimeMillis(),
-                                id = currentNoteId
-                            )
-                        )
-                        _uiEvent.emit(AddEditNoteUiEvent.NavigateBack)
-                    } catch (e: InvalidNoteException) {
-                        _uiEvent.emit(AddEditNoteUiEvent.ShowSnackBar(message = "Couldn't save note"))
-                    }
+                if(currentNoteId == null){
+                    saveNote()
+                }else{
+                    updateNote()
                 }
+            }
+        }
+    }
+
+    private fun saveNote(){
+        viewModelScope.launch {
+            try {
+                useCases.addNote(
+                    Note(
+                        title = _stateHolder.title.text,
+                        content = _stateHolder.content.text,
+                        color = _stateHolder.color,
+                        timestamp = System.currentTimeMillis(),
+                        id = currentNoteId
+                    )
+                )
+                _uiEvent.emit(AddEditNoteUiEvent.NavigateBack)
+            } catch (e: InvalidNoteException) {
+                _uiEvent.emit(AddEditNoteUiEvent.ShowSnackBar(message = "Couldn't save note"))
+            }
+        }
+    }
+
+    private fun updateNote(){
+        viewModelScope.launch {
+            try {
+                useCases.updateNote(
+                    Note(
+                        title = _stateHolder.title.text,
+                        content = _stateHolder.content.text,
+                        color = _stateHolder.color,
+                        timestamp = System.currentTimeMillis(),
+                        id = currentNoteId
+                    )
+                )
+                _uiEvent.emit(AddEditNoteUiEvent.NavigateBack)
+            } catch (e: InvalidNoteException) {
+                _uiEvent.emit(AddEditNoteUiEvent.ShowSnackBar(message = "Couldn't save note"))
             }
         }
     }
@@ -119,7 +146,3 @@ class AddEditNoteViewModel @Inject constructor(
 }
 
 
-fun assda(){
-    val exampleList = mutableListOf<Char>()
-    exampleList.last()
-}

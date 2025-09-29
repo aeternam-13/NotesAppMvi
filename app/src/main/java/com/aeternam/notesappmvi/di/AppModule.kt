@@ -14,6 +14,7 @@ import com.aeternam.notesappmvi.feature_note.domain.usecase.GetNote
 import com.aeternam.notesappmvi.feature_note.domain.usecase.GetNotes
 import com.aeternam.notesappmvi.feature_note.domain.usecase.NoteUseCases
 import com.aeternam.notesappmvi.feature_note.domain.usecase.ToggleAppMode
+import com.aeternam.notesappmvi.feature_note.domain.usecase.UpdateNote
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -73,6 +74,7 @@ object AppModule {
             deleteNote = DeleteNote(repository),
             addNote = AddNote(repository),
             getNote = GetNote(repository),
+            updateNote = UpdateNote(repository),
             toggleAppMode = ToggleAppMode(repository)
         )
     }

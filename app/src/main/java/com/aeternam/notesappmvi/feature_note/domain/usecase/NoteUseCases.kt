@@ -5,5 +5,6 @@ data class NoteUseCases(
     val deleteNote: DeleteNote,
     val addNote: AddNote,
     val getNote: GetNote,
+    val updateNote : UpdateNote,
     val toggleAppMode: ToggleAppMode
 )

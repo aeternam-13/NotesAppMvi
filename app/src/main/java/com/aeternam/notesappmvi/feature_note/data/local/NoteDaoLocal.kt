@@ -42,12 +42,22 @@ class NoteDaoLocal(
         return dao.getNoteById(id)
     }
 
-    override suspend fun insertNote(note: Note) {
-        return dao.insertNote(note)
+    override suspend fun insertNote(note: Note): Result<Unit, NoteException> {
+        try {
+            dao.insertNote(note)
+            return Success(Unit)
+        } catch (e: Exception) {
+            return Failure(NoteDataBaseException(e.message ?: ""))
+        }
     }
 
-    override suspend fun deleteNote(note: Note){
-        return dao.deleteNote(note)
+    override suspend fun deleteNote(note: Note): Result<Unit, NoteException> {
+        try {
+            dao.deleteNote(note)
+            return Success(Unit)
+        } catch (e: Exception) {
+            return Failure(NoteDataBaseException(e.message ?: ""))
+        }
     }
 
     override suspend fun updateNote(note: Note): Result<Unit, NoteException> {

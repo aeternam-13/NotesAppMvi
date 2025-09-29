@@ -16,8 +16,8 @@ interface NotesApiService {
     suspend fun saveNote(@Body note: Note): Note
 
     @PUT("notes/{id}")
-    suspend fun updateNote(@Body note: Note): Note
+    suspend fun updateNote(@Path("id") noteId: Int, @Body note: Note): Note
 
     @DELETE("notes/{id}")
-    suspend fun deleteNote(@Path("id") noteId: String)
+    suspend fun deleteNote(@Path("id") noteId: Int)
 }

@@ -7,14 +7,9 @@ import kotlinx.coroutines.flow.Flow
 import com.aeternam.notesappmvi.core.Result
 
 interface NoteDao {
-
-    fun getNotes() : Flow<Result<List<Note>, NoteException>>
-
+    fun getNotes(): Flow<Result<List<Note>, NoteException>>
     suspend fun getNoteById(id: Int): Note?
-
-    suspend fun insertNote(note : Note)
-
-    suspend fun deleteNote(note: Note)
-
-    suspend fun updateNote(note : Note) : Result<Unit, NoteException>
+    suspend fun insertNote(note: Note): Result<Unit, NoteException>
+    suspend fun deleteNote(note: Note): Result<Unit, NoteException>
+    suspend fun updateNote(note: Note): Result<Unit, NoteException>
 }
